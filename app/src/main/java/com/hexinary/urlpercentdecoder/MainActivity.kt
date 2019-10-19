@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu
 import android.view.MenuItem
 import android.webkit.URLUtil
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hexinary.urlpercentdecoder.controllers.URLadapter
@@ -31,11 +33,15 @@ class MainActivity : AppCompatActivity() {
 
         //Initialize recycler view with no data
         recyclerView = findViewById<RecyclerView>(R.id.recyclerview_urllist).apply {
+
+            setHasFixedSize(true)
             // use a linear layout manager
             layoutManager = viewManager
             // specify an viewAdapter (see also next example)
             adapter = viewAdapter
         }
+        val decoration = DividerItemDecoration(applicationContext, VERTICAL)
+        recyclerView.addItemDecoration(decoration)
 
         //Decode urls on button click
         button_urlDecode.setOnClickListener {
