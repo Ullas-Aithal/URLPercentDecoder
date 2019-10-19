@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
         viewManager = LinearLayoutManager(this)
-        viewAdapter = URLadapter(decodedValidURLs)
+        viewAdapter = URLadapter(decodedValidURLs,this)
 
         //Initialize recycler view with no data
         recyclerView = findViewById<RecyclerView>(R.id.recyclerview_urllist).apply {
