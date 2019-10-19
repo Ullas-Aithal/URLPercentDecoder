@@ -1,12 +1,10 @@
 package com.hexinary.urlpercentdecoder.controllers
 
-import android.animation.ObjectAnimator
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -16,7 +14,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.getSystemService
 import androidx.recyclerview.widget.RecyclerView
 import com.hexinary.urlpercentdecoder.R
 
@@ -61,10 +58,22 @@ class URLadapter(private val dataSet: ArrayList<String>, private val context: Co
             Toast.makeText(mContext,mContext.getString(R.string.copied_to_clipboard),Toast.LENGTH_SHORT).show()
         }
 
+        //Share url
+        holder.layoutUrlView.findViewById<ImageView>(R.id.imageView_shareUrl).setOnClickListener {
+            val intent: Intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, textView.text.toString())
+                type = "text/plain"
+            }
+
+            val shareIntent = Intent.createChooser(intent, null)
+            mContext.startActivity(shareIntent)
+        }
         //Open the url in appropriate app
         holder.layoutUrlView.findViewById<ImageView>(R.id.imageView_openInBrowser).setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse(textView.text.toString())
+            val intent = Intent(Intent.ACTION_VIEW).apply {
+                data = Uri.parse(textView.text.toString())
+            }
             mContext.startActivity(intent)
         }
 
