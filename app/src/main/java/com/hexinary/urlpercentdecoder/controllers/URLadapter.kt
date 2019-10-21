@@ -28,7 +28,7 @@ class URLadapter(private val dataSet: ArrayList<String>, private val context: Co
                                     viewType: Int): URLadapter.CustomViewHolder {
         // create a new view
         val layoutUrlView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.url_view, parent, false) as ConstraintLayout
+            .inflate(R.layout.recycler_url_item, parent, false) as ConstraintLayout
 
         return CustomViewHolder(layoutUrlView)
     }
