@@ -5,7 +5,9 @@ import android.content.Context
 import android.content.DialogInterface
 import android.text.TextUtils
 import android.view.LayoutInflater
+import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
@@ -14,6 +16,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.hexinary.urlpercentdecoder.R
 import com.hexinary.urlpercentdecoder.controllers.URLadapter
 
@@ -25,6 +28,7 @@ class MainScreenView(private val mContext: Context, private val mainLayout: Cons
     private lateinit var recyclerViewLayout: ConstraintLayout
     var inputUrlText: String? = null
     private val textViewInputUrl = mainLayout.findViewById<TextView>(R.id.textView_inputUrl)
+    private val buttonUrlDecode = mainLayout.findViewById<Button>(R.id.button_urlDecode)
 
     fun initializeRecyclerView(decodedValidURLs: ArrayList<String>, recyclerViewLayout: ConstraintLayout){
         this.recyclerViewLayout = recyclerViewLayout
@@ -41,7 +45,6 @@ class MainScreenView(private val mContext: Context, private val mainLayout: Cons
         }
         val decoration = DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL)
         recyclerView.addItemDecoration(decoration)
-
 
     }
     fun notifyDataSetChange(){
@@ -63,6 +66,8 @@ class MainScreenView(private val mContext: Context, private val mainLayout: Cons
                     inputUrlText = alertDialogEditText.text.toString()
                     textViewInputUrl.visibility = VISIBLE
                     textViewInputUrl.text = inputUrlText
+                    buttonUrlDecode.isEnabled = true
+                    Toast.makeText(mContext,R.string.url_loaded,Toast.LENGTH_SHORT).show()
                 }
             }).setNeutralButton("Cancel", DialogInterface.OnClickListener { dialogInterface, i ->
 
@@ -71,6 +76,10 @@ class MainScreenView(private val mContext: Context, private val mainLayout: Cons
             .setNegativeButton("Clear All",DialogInterface.OnClickListener {
                     dialogInterface, i ->
                 alertDialogEditText.text.clear()
+                textViewInputUrl.text = null
+                textViewInputUrl.visibility = GONE
+                buttonUrlDecode.isEnabled = false
+                Toast.makeText(mContext,R.string.url_cleared,Toast.LENGTH_SHORT).show()
             })
 
             .create()

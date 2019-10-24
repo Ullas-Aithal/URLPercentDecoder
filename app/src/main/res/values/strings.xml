@@ -7,4 +7,6 @@
     <string name="copied_to_clipboard">Text copied to clipboard!</string>
     <string name="add_edit_url">Add/Edit Url</string>
     <string name="cannot_be_empty">URL cannot be empty</string>
+    <string name="url_loaded">URL Loaded!</string>
+    <string name="url_cleared">URL Cleared</string>
 </resources>
