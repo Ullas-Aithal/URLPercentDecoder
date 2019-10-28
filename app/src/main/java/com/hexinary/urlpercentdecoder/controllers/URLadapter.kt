@@ -15,6 +15,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
+import com.hexinary.urlpercentdecoder.MainActivity
 import com.hexinary.urlpercentdecoder.R
 
 class URLadapter(private val dataSet: ArrayList<String>, private val context: Context) :
@@ -56,6 +57,10 @@ class URLadapter(private val dataSet: ArrayList<String>, private val context: Co
             val clipboard = mContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             clipboard.setPrimaryClip(ClipData.newPlainText("url", textView.text.toString()))
             Toast.makeText(mContext,mContext.getString(R.string.copied_to_clipboard),Toast.LENGTH_SHORT).show()
+        }
+
+        holder.layoutUrlView.findViewById<ImageView>(R.id.imageView_decodeThis).setOnClickListener {
+            (mContext as MainActivity).reInitialize(textView.text.toString())
         }
 
         //Share url

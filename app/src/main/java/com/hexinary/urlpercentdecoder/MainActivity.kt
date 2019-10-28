@@ -43,8 +43,7 @@ class MainActivity : AppCompatActivity() {
 
         //Decode urls on button click
         button_urlDecode.setOnClickListener {
-            decodedValidURLs.clear()
-            decodedInvalidURLs.clear()
+            clearRecyclerViewData()
             decodeUrl(mainScreenView.inputUrlText)
             mainScreenView.notifyDataSetChange()
         }
@@ -95,6 +94,18 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    fun reInitialize(text: String){
+        clearRecyclerViewData()
+        mainScreenView.loadUrl(text)
+
+    }
+
+    private fun clearRecyclerViewData(){
+        decodedValidURLs.clear()
+        decodedInvalidURLs.clear()
+        mainScreenView.notifyDataSetChange()
     }
 
 }

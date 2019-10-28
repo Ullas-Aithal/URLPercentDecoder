@@ -63,11 +63,7 @@ class MainScreenView(private val mContext: Context, private val mainLayout: Cons
                 if(TextUtils.isEmpty(alertDialogEditText.text.toString())){
                     Toast.makeText(mContext,mContext.getString(R.string.cannot_be_empty),Toast.LENGTH_SHORT).show()
                 } else {
-                    inputUrlText = alertDialogEditText.text.toString()
-                    textViewInputUrl.visibility = VISIBLE
-                    textViewInputUrl.text = inputUrlText
-                    buttonUrlDecode.isEnabled = true
-                    Toast.makeText(mContext,R.string.url_loaded,Toast.LENGTH_SHORT).show()
+                    loadUrl(alertDialogEditText.text.toString())
                 }
             }).setNeutralButton("Cancel", DialogInterface.OnClickListener { dialogInterface, i ->
 
@@ -98,6 +94,13 @@ class MainScreenView(private val mContext: Context, private val mainLayout: Cons
 //        } )
 //        alertDialog.show()
 
+    }
+    fun loadUrl(text: String){
+        inputUrlText = text
+        textViewInputUrl.visibility = VISIBLE
+        textViewInputUrl.text = inputUrlText
+        buttonUrlDecode.isEnabled = true
+        Toast.makeText(mContext,R.string.url_loaded,Toast.LENGTH_SHORT).show()
     }
 
 
