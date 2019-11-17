@@ -3,6 +3,8 @@ package com.hexinary.urlpercentdecoder.views
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.os.Bundle
+import android.os.Parcelable
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View.GONE
@@ -19,6 +21,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.hexinary.urlpercentdecoder.R
 import com.hexinary.urlpercentdecoder.controllers.URLadapter
+import com.hexinary.urlpercentdecoder.model.Constants
+import com.hexinary.urlpercentdecoder.model.URLitem
 
 class MainScreenView(private val mContext: Context, private val mainLayout: ConstraintLayout) {
 
@@ -29,8 +33,9 @@ class MainScreenView(private val mContext: Context, private val mainLayout: Cons
     var inputUrlText: String? = null
     private val textViewInputUrl = mainLayout.findViewById<TextView>(R.id.textView_inputUrl)
     private val buttonUrlDecode = mainLayout.findViewById<Button>(R.id.button_urlDecode)
+    private var restoreInstanceData: Parcelable? = null
 
-    fun initializeRecyclerView(decodedValidURLs: ArrayList<String>, recyclerViewLayout: ConstraintLayout){
+    fun initializeRecyclerView(decodedValidURLs: ArrayList<URLitem>, recyclerViewLayout: ConstraintLayout){
         this.recyclerViewLayout = recyclerViewLayout
         viewManager = LinearLayoutManager(mContext)
         viewAdapter = URLadapter(decodedValidURLs,mContext)
@@ -42,6 +47,9 @@ class MainScreenView(private val mContext: Context, private val mainLayout: Cons
             layoutManager = viewManager
             // specify an viewAdapter (see also next example)
             adapter = viewAdapter
+            if(restoreInstanceData != null) {
+                layoutManager?.onRestoreInstanceState(restoreInstanceData)
+            }
         }
         val decoration = DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL)
         recyclerView.addItemDecoration(decoration)
@@ -72,6 +80,7 @@ class MainScreenView(private val mContext: Context, private val mainLayout: Cons
             .setNegativeButton("Clear All",DialogInterface.OnClickListener {
                     dialogInterface, i ->
                 alertDialogEditText.text.clear()
+
                 textViewInputUrl.text = null
                 textViewInputUrl.visibility = GONE
                 buttonUrlDecode.isEnabled = false
@@ -100,7 +109,20 @@ class MainScreenView(private val mContext: Context, private val mainLayout: Cons
         textViewInputUrl.visibility = VISIBLE
         textViewInputUrl.text = inputUrlText
         buttonUrlDecode.isEnabled = true
-        Toast.makeText(mContext,R.string.url_loaded,Toast.LENGTH_SHORT).show()
+    }
+    fun saveInstanceData(bundle: Bundle) {
+        var parceableData: Parcelable? = null
+        recyclerView.layoutManager?.apply {
+            parceableData = onSaveInstanceState()
+        }
+        bundle.putParcelable(Constants.URL_LIST_RECYCLER_STATE,parceableData)
+        bundle.putString(Constants.URL_LIST_STRING,inputUrlText)
+    }
+    fun  restoreInstanceData(bundle: Bundle) {
+        restoreInstanceData = bundle.getParcelable(Constants.URL_LIST_RECYCLER_STATE)
+        loadUrl(bundle.getString(Constants.URL_LIST_STRING,""))
+
+
     }
 
 

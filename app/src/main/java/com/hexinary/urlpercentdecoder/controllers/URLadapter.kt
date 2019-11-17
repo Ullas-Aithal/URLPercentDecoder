@@ -18,8 +18,9 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.hexinary.urlpercentdecoder.MainActivity
 import com.hexinary.urlpercentdecoder.R
+import com.hexinary.urlpercentdecoder.model.URLitem
 
-class URLadapter(private val dataSet: ArrayList<String>, private val context: Context) :
+class URLadapter(private val dataSet: ArrayList<URLitem>, private val context: Context) :
     RecyclerView.Adapter<URLadapter.CustomViewHolder>() {
     private val mContext = context
 
@@ -41,18 +42,35 @@ class URLadapter(private val dataSet: ArrayList<String>, private val context: Co
 
         val textView = holder.layoutUrlView.findViewById<TextView>(R.id.textView_url)
         val expandCollapseImageView = holder.layoutUrlView.findViewById<ImageView>(R.id.imageView_expandCollapse)
-        textView.text = dataSet[position]
 
+        textView.text = dataSet[position].text
+
+        fun expand(){
+            expandCollapseImageView.rotation = 90.0F
+            textView.setSingleLine(false)
+            holder.layoutUrlView.findViewById<LinearLayout>(R.id.linearLayout_urlOptions).visibility = VISIBLE
+            dataSet[position].isExpanded = true
+        }
+        fun collapse(){
+            expandCollapseImageView.rotation = 0F
+            textView.setSingleLine(true)
+            holder.layoutUrlView.findViewById<LinearLayout>(R.id.linearLayout_urlOptions).visibility = GONE
+            dataSet[position].isExpanded = false
+        }
+        fun expandOrCollapse(){
+            if(dataSet[position].isExpanded){
+                expand()
+            } else {
+                collapse()
+            }
+        }
+        expandOrCollapse()
         //Expands/Collapses item on click
         val decodedUrlClickListener = View.OnClickListener {
             if (textView.lineCount == 1) {
-                expandCollapseImageView.rotation = 90.0F
-                textView.setSingleLine(false)
-                holder.layoutUrlView.findViewById<LinearLayout>(R.id.linearLayout_urlOptions).visibility = VISIBLE
+                expand()
             } else {
-                expandCollapseImageView.rotation = 0F
-                textView.setSingleLine(true)
-                holder.layoutUrlView.findViewById<LinearLayout>(R.id.linearLayout_urlOptions).visibility = GONE
+                collapse()
             }
         }
         //When clicked on expand/collapse image, make textview multiline, show/hide other url control options
@@ -94,5 +112,7 @@ class URLadapter(private val dataSet: ArrayList<String>, private val context: Co
     }
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount() = dataSet.size
+
+
 
 }

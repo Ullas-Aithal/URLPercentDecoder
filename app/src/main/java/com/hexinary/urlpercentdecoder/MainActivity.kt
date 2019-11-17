@@ -2,6 +2,8 @@ package com.hexinary.urlpercentdecoder
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.os.PersistableBundle
+import android.text.TextUtils
 import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
@@ -15,6 +17,8 @@ import androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hexinary.urlpercentdecoder.controllers.URLadapter
+import com.hexinary.urlpercentdecoder.model.Constants
+import com.hexinary.urlpercentdecoder.model.URLitem
 import com.hexinary.urlpercentdecoder.views.MainScreenView
 
 import kotlinx.android.synthetic.main.activity_main.*
@@ -25,7 +29,7 @@ import java.nio.charset.StandardCharsets
 class MainActivity : AppCompatActivity() {
 
 
-    private var decodedValidURLs: ArrayList<String> = arrayListOf()
+    private var decodedValidURLs: ArrayList<URLitem> = arrayListOf()
     private var decodedInvalidURLs: ArrayList<String> = arrayListOf()
     private lateinit var mainScreenView: MainScreenView
 
@@ -39,19 +43,34 @@ class MainActivity : AppCompatActivity() {
 
         mainScreenView = MainScreenView(this, mainLayout)
         mainScreenView.initializeRecyclerView(decodedValidURLs,recyclerViewLayout)
+        if(savedInstanceState != null) {
+            mainScreenView.restoreInstanceData(savedInstanceState)
+            if(!TextUtils.isEmpty(mainScreenView.inputUrlText)){
+                decode(mainScreenView.inputUrlText)
+            }
+        }
 
 
         //Decode urls on button click
         button_urlDecode.setOnClickListener {
-            clearRecyclerViewData()
-            decodeUrl(mainScreenView.inputUrlText)
-            mainScreenView.notifyDataSetChange()
+            decode(mainScreenView.inputUrlText)
         }
 
         button_expandCollapse.setOnClickListener {
             mainScreenView.initalizeAlertDialog()
         }
     }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        mainScreenView.saveInstanceData(outState)
+        super.onSaveInstanceState(outState)
+    }
+
+    /*override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        mainScreenView.restoreInstanceData(savedInstanceState)
+
+    }*/
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -87,7 +106,7 @@ class MainActivity : AppCompatActivity() {
                 tempString.forEach {
                     val decodedUrl = URLDecoder.decode(it, StandardCharsets.UTF_8.name()).toString()
                     if (URLUtil.isValidUrl(decodedUrl)) {
-                        decodedValidURLs.add(decodedUrl)
+                        decodedValidURLs.add(URLitem(decodedUrl,true))
                     } else {
                         decodedInvalidURLs.add(decodedUrl)
                     }
@@ -96,6 +115,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun decode(urls:String?){
+        clearRecyclerViewData()
+        decodeUrl(urls)
+        mainScreenView.notifyDataSetChange()
+    }
     fun reInitialize(text: String){
         clearRecyclerViewData()
         mainScreenView.loadUrl(text)
