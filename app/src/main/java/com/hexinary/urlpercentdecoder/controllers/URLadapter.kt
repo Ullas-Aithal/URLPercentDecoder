@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
+import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
@@ -39,18 +40,26 @@ class URLadapter(private val dataSet: ArrayList<String>, private val context: Co
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
 
         val textView = holder.layoutUrlView.findViewById<TextView>(R.id.textView_url)
+        val expandCollapseImageView = holder.layoutUrlView.findViewById<ImageView>(R.id.imageView_expandCollapse)
         textView.text = dataSet[position]
 
-        //When clicked on expand/collapse image, make textview multiline, show/hide other url control options
-        holder.layoutUrlView.findViewById<ImageView>(R.id.imageView_expandCollapse).setOnClickListener {
+        //Expands/Collapses item on click
+        val decodedUrlClickListener = View.OnClickListener {
             if (textView.lineCount == 1) {
+                expandCollapseImageView.rotation = 90.0F
                 textView.setSingleLine(false)
                 holder.layoutUrlView.findViewById<LinearLayout>(R.id.linearLayout_urlOptions).visibility = VISIBLE
             } else {
+                expandCollapseImageView.rotation = 0F
                 textView.setSingleLine(true)
                 holder.layoutUrlView.findViewById<LinearLayout>(R.id.linearLayout_urlOptions).visibility = GONE
             }
         }
+        //When clicked on expand/collapse image, make textview multiline, show/hide other url control options
+        expandCollapseImageView.setOnClickListener (decodedUrlClickListener)
+        textView.setOnClickListener(decodedUrlClickListener)
+
+
 
         //Copy the url to clipboard
         holder.layoutUrlView.findViewById<ImageView>(R.id.imageView_copyToClipboard).setOnClickListener{
