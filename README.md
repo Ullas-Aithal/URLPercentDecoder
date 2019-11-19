@@ -15,3 +15,7 @@ You can see two websites in this link
 You can access the first link (which is a tracker) but the second link is encoded which has to be decoded. 
 
 This app will take the whole url, splits all url in the links, decodes it and gives you a direct way to open the actual link in browser.
+
+**A small demo:**
+
+![Example GIF](example.gif)
