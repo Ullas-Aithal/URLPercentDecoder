@@ -87,6 +87,7 @@ class URLadapter(private val dataSet: ArrayList<URLitem>, private val context: C
         }
 
         holder.layoutUrlView.findViewById<ImageView>(R.id.imageView_decodeThis).setOnClickListener {
+            //(mContext as MainActivity).reInitialize(textView.text.toString())
             (mContext as MainActivity).reInitialize(textView.text.toString())
         }
 

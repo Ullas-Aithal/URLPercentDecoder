@@ -116,20 +116,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun decode(urls:String?){
-        clearRecyclerViewData()
+        mainScreenView.clearRecyclerViewData()
         decodeUrl(urls)
         mainScreenView.notifyDataSetChange()
     }
     fun reInitialize(text: String){
-        clearRecyclerViewData()
+        mainScreenView.clearRecyclerViewData()
         mainScreenView.loadUrl(text)
 
     }
 
-    private fun clearRecyclerViewData(){
-        decodedValidURLs.clear()
-        decodedInvalidURLs.clear()
-        mainScreenView.notifyDataSetChange()
-    }
+
 
 }

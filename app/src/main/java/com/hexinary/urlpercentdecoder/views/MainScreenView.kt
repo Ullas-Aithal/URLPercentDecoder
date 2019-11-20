@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import com.hexinary.urlpercentdecoder.MainActivity
 import com.hexinary.urlpercentdecoder.R
 import com.hexinary.urlpercentdecoder.controllers.URLadapter
 import com.hexinary.urlpercentdecoder.model.Constants
@@ -34,11 +35,13 @@ class MainScreenView(private val mContext: Context, private val mainLayout: Cons
     private val textViewInputUrl = mainLayout.findViewById<TextView>(R.id.textView_inputUrl)
     private val buttonUrlDecode = mainLayout.findViewById<Button>(R.id.button_urlDecode)
     private var restoreInstanceData: Parcelable? = null
+    private lateinit var decodedValidURLs: ArrayList<URLitem>
 
     fun initializeRecyclerView(decodedValidURLs: ArrayList<URLitem>, recyclerViewLayout: ConstraintLayout){
         this.recyclerViewLayout = recyclerViewLayout
+        this.decodedValidURLs = decodedValidURLs
         viewManager = LinearLayoutManager(mContext)
-        viewAdapter = URLadapter(decodedValidURLs,mContext)
+        viewAdapter = URLadapter(this.decodedValidURLs,mContext)
         //Initialize recycler view with no data
         recyclerView = recyclerViewLayout.findViewById<RecyclerView>(R.id.recyclerview_urllist).apply {
 
@@ -123,6 +126,29 @@ class MainScreenView(private val mContext: Context, private val mainLayout: Cons
         loadUrl(bundle.getString(Constants.URL_LIST_STRING,""))
 
 
+    }
+    fun clearRecyclerViewData(){
+        decodedValidURLs.clear()
+        //decodedInvalidURLs.clear()
+        notifyDataSetChange()
+    }
+
+    fun reDecodeURL(url: String){
+        AlertDialog.Builder(mContext)
+            .setMessage("Do you want to decode this url?")
+            .setPositiveButton("Done", DialogInterface.OnClickListener {
+                    dialogInterface, i ->
+                (mContext as MainActivity).reInitialize(url)
+
+            })
+
+            .setNegativeButton("Cancel",DialogInterface.OnClickListener {
+                    dialogInterface, i ->
+
+            })
+
+            .create()
+            .show()
     }
 
 
