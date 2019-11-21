@@ -50,6 +50,8 @@ class MainScreenView(private val mContext: Context, private val mainLayout: Cons
             layoutManager = viewManager
             // specify an viewAdapter (see also next example)
             adapter = viewAdapter
+
+            //Restore data
             if(restoreInstanceData != null) {
                 layoutManager?.onRestoreInstanceState(restoreInstanceData)
             }
@@ -69,24 +71,27 @@ class MainScreenView(private val mContext: Context, private val mainLayout: Cons
        AlertDialog.Builder(mContext)
             .setView(alertDialogLayout)
              .setTitle(mContext.getString(R.string.add_edit_url))
-             .setPositiveButton("Done", DialogInterface.OnClickListener {
+             .setPositiveButton(mContext.resources.getString(R.string.alert_dialog_done), DialogInterface.OnClickListener {
                     dialogInterface, i ->
+                 //Load the url. Ready to decode
                 if(TextUtils.isEmpty(alertDialogEditText.text.toString())){
                     Toast.makeText(mContext,mContext.getString(R.string.cannot_be_empty),Toast.LENGTH_SHORT).show()
                 } else {
                     loadUrl(alertDialogEditText.text.toString())
                 }
-            }).setNeutralButton("Cancel", DialogInterface.OnClickListener { dialogInterface, i ->
-
+            }).setNeutralButton(mContext.resources.getString(R.string.alert_dialog_cancel), DialogInterface.OnClickListener { dialogInterface, i ->
+                //Don't do anything. Dismiss
             })
 
-            .setNegativeButton("Clear All",DialogInterface.OnClickListener {
+            .setNegativeButton(mContext.resources.getString(R.string.alert_dialog_clear_all),DialogInterface.OnClickListener {
                     dialogInterface, i ->
-                alertDialogEditText.text.clear()
 
+                //Clear all data
+                alertDialogEditText.text.clear()
                 textViewInputUrl.text = null
                 textViewInputUrl.visibility = GONE
                 buttonUrlDecode.isEnabled = false
+                clearRecyclerViewData()
                 Toast.makeText(mContext,R.string.url_cleared,Toast.LENGTH_SHORT).show()
             })
 
@@ -124,8 +129,6 @@ class MainScreenView(private val mContext: Context, private val mainLayout: Cons
     fun  restoreInstanceData(bundle: Bundle) {
         restoreInstanceData = bundle.getParcelable(Constants.URL_LIST_RECYCLER_STATE)
         loadUrl(bundle.getString(Constants.URL_LIST_STRING,""))
-
-
     }
     fun clearRecyclerViewData(){
         decodedValidURLs.clear()
@@ -138,7 +141,7 @@ class MainScreenView(private val mContext: Context, private val mainLayout: Cons
             .setMessage("Do you want to decode this url?")
             .setPositiveButton("Done", DialogInterface.OnClickListener {
                     dialogInterface, i ->
-                (mContext as MainActivity).reInitialize(url)
+                reInitialize(url)
 
             })
 
@@ -149,6 +152,12 @@ class MainScreenView(private val mContext: Context, private val mainLayout: Cons
 
             .create()
             .show()
+    }
+
+    fun reInitialize(text: String){
+        clearRecyclerViewData()
+        loadUrl(text)
+
     }
 
 

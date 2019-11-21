@@ -9,4 +9,7 @@
     <string name="cannot_be_empty">URL cannot be empty</string>
     <string name="url_loaded">URL Loaded!</string>
     <string name="url_cleared">URL Cleared</string>
+    <string name="alert_dialog_done">Done</string>
+    <string name="alert_dialog_clear_all">Clear All</string>
+    <string name="alert_dialog_cancel">Cancel</string>
 </resources>

@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
     private var decodedValidURLs: ArrayList<URLitem> = arrayListOf()
     private var decodedInvalidURLs: ArrayList<String> = arrayListOf()
-    private lateinit var mainScreenView: MainScreenView
+    lateinit var mainScreenView: MainScreenView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -119,11 +119,6 @@ class MainActivity : AppCompatActivity() {
         mainScreenView.clearRecyclerViewData()
         decodeUrl(urls)
         mainScreenView.notifyDataSetChange()
-    }
-    fun reInitialize(text: String){
-        mainScreenView.clearRecyclerViewData()
-        mainScreenView.loadUrl(text)
-
     }
 
 
